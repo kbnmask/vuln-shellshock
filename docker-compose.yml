@@ -1,0 +1,32 @@
+version: '3'
+ 
+services:
+  balancer:
+    container_name: 'balancer'
+    image: nginx
+    volumes:
+      - ./balancer/default.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    networks:
+      - balancer
+ 
+  web1:
+    container_name: 'vuln1'
+    image: vulnerables/cve-2014-6271
+    ports:
+      - 7000:80
+    networks:
+      - balancer
+ 
+  web2:
+    container_name: 'vuln2'
+    image: vulnerables/cve-2014-6271
+    ports:
+      - 7001:80
+    networks:
+      - balancer
+ 
+networks:
+  balancer:
+    driver: "bridge"
